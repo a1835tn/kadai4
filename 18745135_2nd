@@ -1,0 +1,46 @@
+#!/bin/bash
+
+num=$1
+n_max=67280421310721
+
+expr $num + 1 > /dev/null 2>&1
+
+if [ $? -ne 0 ]
+  then
+    echo "Sorry. $num is -1 or not an int number."
+    exit
+  else
+    if [ $num -le 0 ]
+      then
+        echo "Sorry. $num is a negative number or zero."
+        exit
+      else
+        if [ $num -gt $n_max ]
+          then
+            echo "Sorry. $num is too large."
+            exit
+        fi
+    fi
+fi
+
+num_sqrt=`echo "$num" | awk '{print int(sqrt($1))}'`
+num_div=0
+
+echo "num_sqrt=$num_sqrt"
+
+if [ $(($num_sqrt*$num_sqrt)) = $num ]
+  then
+    echo "$num is not a prime number."
+    echo "divisor of $num: $num_sqrt"
+  else
+    for (( i=2 ; i<=$num_sqrt ; i++)); do
+      echo "i=$i"
+      echo "$num%$i=$(($num%$i))"
+      if [ $(($num%$i)) -eq 0 ]
+        then
+          echo "divisor of $num: $i"
+          exit
+      fi
+    done
+    echo "$num is a prime number!!"
+fi
